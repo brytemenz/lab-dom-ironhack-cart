@@ -36,18 +36,59 @@ function calculateAll() {
 // ITERATION 4
 
 function removeProduct(event) {
-  //... your code goes here
+  const target = event.currentTarget;
+  const productRow = target.parentNode.parentNode;
+  const tableBody = document.getElementsByTagName("tbody")[0];
+  tableBody.removeChild(productRow);
+  calculateAll();
 }
 
 // ITERATION 5
 
 function createProduct() {
-  //... your code goes here
+  const productNameInput = document.querySelector(
+    ".create-product input[type='text']"
+  );
+  const productPriceInput = document.querySelector(
+    ".create-product input[type='number']"
+  );
+
+  const productName = productNameInput.value;
+  const productPrice = parseFloat(productPriceInput.value);
+
+  if (productName && productPrice) {
+    const tableBody = document.querySelector("tbody");
+    const newRow = document.createElement("tr");
+    newRow.classList.add("product");
+    newRow.innerHTML = `
+      <td class="name">
+        <span>${productName}</span>
+      </td>
+      <td class="price">$<span>${productPrice.toFixed(2)}</span></td>
+      <td class="quantity">
+        <input type="number" value="0" min="0" placeholder="Quantity" />
+      </td>
+      <td class="subtotal">$<span>0.00</span></td>
+      <td class="action">
+        <button class="btn btn-remove">Remove</button>
+      </td>
+    `;
+
+    tableBody.appendChild(newRow);
+    productNameInput.value = "";
+    productPriceInput.value = "";
+
+    const removeButtons = document.getElementsByClassName("btn-remove");
+    for (let i = 0; i < removeButtons.length; i++) {
+      removeButtons[i].addEventListener("click", removeProduct);
+    }
+  }
 }
 
 window.addEventListener("load", () => {
   const calculatePricesBtn = document.getElementById("calculate");
   calculatePricesBtn.addEventListener("click", calculateAll);
 
-  //... your code goes here
+  const createProductBtn = document.getElementById("create");
+  createProductBtn.addEventListener("click", createProduct);
 });
